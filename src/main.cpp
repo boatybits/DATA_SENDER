@@ -10,7 +10,6 @@ void setup()
   Serial.begin(115200);
   Wire.begin(5, 4); // pins 5 & 4 for wemos
   LogOn();
-
   BE280.setI2CAddress(0x76); //Connect to BME on ox76
   if (BE280.beginI2C() == false)
     Serial.println("BE280 connect failed");
@@ -95,6 +94,9 @@ void LogOn()
 }
 //________________________________________________________________________________
 
+
+
+
 //                     callback ( ) - runs when MQTT message comes in
 //*******************************************************
 void callback(char *intopic, byte *payload, unsigned int length)
@@ -171,6 +173,10 @@ void callback(char *intopic, byte *payload, unsigned int length)
 }
 //________________________________________________________________________________
 
+
+
+
+
 //                     sendMQTT ( )
 //*******************************************************
 void sendMQTT(String topic, String message)
@@ -185,6 +191,10 @@ void sendMQTT(String topic, String message)
 }
 //___________________________________________________________
 
+
+
+
+
 // Quick print function
 //*******************************************************
 void qp(String to_print, int linefeed)
@@ -195,6 +205,10 @@ void qp(String to_print, int linefeed)
     Serial.println(to_print);
 }
 //________________________________________________________________________________
+
+
+
+
 
 //                     send signalk data over UDP
 //*******************************************************
@@ -229,11 +243,14 @@ void sendSigK(String sigKey, float data)
 
 //___________________________________________________________
 
+
+
+
+//                     send sensor data
+//*******************************************************
 void send_Data(int send_Data_Rate)
 
 {
-
- 
 
   //is it time to process the next state code?
   if (currentMillis - timer1_Millis < send_Data_Rate)
