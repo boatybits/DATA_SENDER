@@ -57,7 +57,7 @@ void LogOn()
   while (WiFi.waitForConnectResult() != WL_CONNECTED)
   {
     Serial.println("Connection Failed! Rebooting...");
-    delay(1000);
+    delay(2500);
     ESP.restart();
   }
   // Log on successful
