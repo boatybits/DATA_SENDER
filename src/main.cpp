@@ -94,9 +94,6 @@ void LogOn()
 }
 //________________________________________________________________________________
 
-
-
-
 //                     callback ( ) - runs when MQTT message comes in
 //*******************************************************
 void callback(char *intopic, byte *payload, unsigned int length)
@@ -173,10 +170,6 @@ void callback(char *intopic, byte *payload, unsigned int length)
 }
 //________________________________________________________________________________
 
-
-
-
-
 //                     sendMQTT ( )
 //*******************************************************
 void sendMQTT(String topic, String message)
@@ -191,10 +184,6 @@ void sendMQTT(String topic, String message)
 }
 //___________________________________________________________
 
-
-
-
-
 // Quick print function
 //*******************************************************
 void qp(String to_print, int linefeed)
@@ -205,10 +194,6 @@ void qp(String to_print, int linefeed)
     Serial.println(to_print);
 }
 //________________________________________________________________________________
-
-
-
-
 
 //                     send signalk data over UDP
 //*******************************************************
@@ -242,9 +227,6 @@ void sendSigK(String sigKey, float data)
 }
 
 //___________________________________________________________
-
-
-
 
 //                     send sensor data
 //*******************************************************
