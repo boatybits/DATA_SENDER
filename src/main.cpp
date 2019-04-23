@@ -198,7 +198,8 @@ void qp(String to_print, int linefeed)
     Serial.print(to_print);
   else if (linefeed == 1 && quickprint_flag == 1)
     Serial.println(to_print);
-}//________________________________________________________________________________
+}
+//________________________________________________________________________________
 
 
 //                     send signalk data over UDP
