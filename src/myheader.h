@@ -7,7 +7,7 @@
 #include "PubSubClient.h" // MQTT
 #include "SparkFunBME280.h"
 #include "ArduinoJson.h"
-#include <Adafruit_INA219.h> //https://github.com/adafruit/Adafruit_INA219
+#include "Adafruit_INA219.h" //https://github.com/adafruit/Adafruit_INA219
 #include "Adafruit_ADS1015.h"
 
 // call functions so they can be put under main loop and compiler still sees them first
