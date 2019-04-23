@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 
-// Wifi credentials//
+// Wifi credentials//tet
 const char *ssid = "openplotter";
 const char *password = "12345678";
 const IPAddress mqttServer(10, 10, 10, 1);
