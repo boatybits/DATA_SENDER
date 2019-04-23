@@ -1,6 +1,7 @@
 #pragma once // header guard so the file only runs once
 
 #include <Arduino.h>
+#include "credentials.h"
 #include <WiFi.h>
 #include <WiFiClient.h>
 #include "PubSubClient.h" // MQTT
@@ -16,14 +17,7 @@ void sendMQTT(String topic, String message);
 void sendSigK(String sigKey, float data);
 void send_Data(int send_Data_Rate);
 
-// Wifi credentials
-const char *ssid = "openplotter";
-const char *password = "12345678";
-const IPAddress mqttServer(10, 10, 10, 1);
-const int mqttPort = 1883;
-const char *mqttUser = "cafonhvu";
-const char *mqttPassword = "Usp_VhNLl897";
-const PROGMEM char MQTT_CLIENT_ID[] = "esp32Client";
+
 
 const IPAddress remoteIp(10, 10, 10, 1); //
 const unsigned short remotePort = 55561; // Signalk listens on this port
