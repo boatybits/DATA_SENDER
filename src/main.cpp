@@ -272,6 +272,8 @@ void send_Data(int send_Data_Rate)
     Serial.print("(");
     Serial.print(results * multiplier);
     Serial.println("mV)");
+    Serial.print("MQTT client connecter");
+    Serial.println(client.connected());
 
     timer1_Millis = currentMillis; //reset timing
   }
