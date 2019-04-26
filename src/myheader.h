@@ -17,8 +17,6 @@ void sendMQTT(String topic, String message);
 void sendSigK(String sigKey, float data);
 void send_Data(int send_Data_Rate);
 
-
-
 const IPAddress remoteIp(10, 10, 10, 1); //
 const unsigned short remotePort = 55561; // Signalk listens on this port
 const unsigned short localPort = 6666;   // local port to listen for UDP packets
@@ -33,6 +31,7 @@ unsigned long timer3_Millis = 1000;
 unsigned long timer4_Millis = 1000;
 unsigned long timer5_Millis = 1000;
 unsigned long timer6_Millis = 1000;
+int rebooted = 0;
 
 // Flags
 int quickprint_flag = 1;
@@ -46,5 +45,5 @@ PubSubClient client(espClient); // MQTT
 BME280 BE280;                   //BME280 barometer
 WiFiUDP Udp;                    // A UDP instance to let us send and receive packets over UDP
 Adafruit_INA219 ina219;
-Adafruit_ADS1115 ads (0x4A);
+Adafruit_ADS1115 ads(0x4A);
 Adafruit_ADS1115 ads2(0x4A);

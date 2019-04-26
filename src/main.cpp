@@ -267,20 +267,23 @@ void send_Data(int send_Data_Rate)
     float multiplier = 0.1875F; /* ADS1115  @ +/- 6.144V gain (16-bit results) */
     int16_t results;
     results = ads2.readADC_Differential_0_1();
+    sendMQTT("esp/voltage", String(results * multiplier));
     Serial.print("Differential: ");
     Serial.print(results);
     Serial.print("(");
     Serial.print(results * multiplier);
     Serial.println("mV)");
-    Serial.print("MQTT client connected - ");
+    Serial.print("MQTT client connected:  ");
     Serial.println(client.connected());
 
     if (client.connected() != true)
     {
       Serial.println("Rebooting from data sender module");
       LogOn();
+      rebooted += rebooted;
     }
-
+    Serial.print("Rebooted=");
+    Serial.println(rebooted);
     timer1_Millis = currentMillis; //reset timing
   }
 
