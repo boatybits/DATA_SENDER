@@ -275,15 +275,20 @@ void send_Data(int send_Data_Rate)
     Serial.println("mV)");
     Serial.print("MQTT client connected:  ");
     Serial.println(client.connected());
+    counter += 1;
+    Serial.print("Counter = ");
+    Serial.println(counter);
+    sendMQTT("esp/pulseWidth", String(counter));
+    Serial.print("Rebooted=");
+    Serial.println(rebooted);
 
     if (client.connected() != true)
     {
       Serial.println("Rebooting from data sender module");
       LogOn();
-      rebooted += rebooted;
+      rebooted += 1;
     }
-    Serial.print("Rebooted=");
-    Serial.println(rebooted);
+
     timer1_Millis = currentMillis; //reset timing
   }
 

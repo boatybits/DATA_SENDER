@@ -24,6 +24,7 @@ const unsigned short localPort = 6666;   // local port to listen for UDP packets
 // Timers for loops
 int send_Data_Rate = 1000; // loop time in mS for a2_sendData_Rate
 int check_online_Rate = 100;
+int counter = 0;
 
 unsigned long timer1_Millis; // send data
 unsigned long timer2_Millis = 10000;
