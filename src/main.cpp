@@ -39,6 +39,8 @@ void setup()
   lcd.backlight();
   lcd.setCursor(0, 1);
   lcd.print("Booted. Hi World");
+  delay(4000);
+  lcd.clear();
 }
 //________________________________________________________________________________
 
