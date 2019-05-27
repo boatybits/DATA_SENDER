@@ -10,6 +10,7 @@
 #include "ArduinoJson.h"
 #include "Adafruit_INA219.h" //https://github.com/adafruit/Adafruit_INA219
 #include "Adafruit_ADS1015.h"
+#include "LiquidCrystal_I2C.h"
 
 // call functions so they can be put under main loop and compiler still sees them first
 void LogOn();
@@ -59,3 +60,4 @@ WiFiUDP Udp;                    // A UDP instance to let us send and receive pac
 Adafruit_INA219 ina219;
 Adafruit_ADS1115 ads(0x4A);
 Adafruit_ADS1115 ads2(0x4A);
+LiquidCrystal_I2C lcd(0x27, 16, 2); // set the LCD address to 0x27 for a 16 chars and 2 line display

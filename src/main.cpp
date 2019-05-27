@@ -34,6 +34,11 @@ void setup()
 
   server.begin();
   Serial.println("HTTP server started");
+  //LCD
+  lcd.init(); // initialize the lcd
+  lcd.backlight();
+  lcd.setCursor(0, 1);
+  lcd.print("Booted. Hi World");
 }
 //________________________________________________________________________________
 
@@ -45,7 +50,7 @@ void loop(void)
 
   client.loop();
   currentMillis = millis();
-  send_Data(100);
+  send_Data(1000);
 
   server.handleClient();
   if (LED1status)
@@ -274,6 +279,13 @@ void send_Data(int send_Data_Rate)
 
     sendSigK("environment.outside.pressure", BMEpressure);
     sendSigK("environment.inside.temperature", (BMEtemp + 273.15));
+    lcd.setCursor(0, 0);
+    lcd.print("Pressure=");
+    lcd.print(BMEpressure / 100);
+    lcd.setCursor(0, 1);
+    lcd.print("Temp=");
+    lcd.print(BMEtemp);
+
     qp("Pressure:", 0);
     qp(String(BMEpressure), 1);
     qp("Temp:", 0);
