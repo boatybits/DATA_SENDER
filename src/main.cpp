@@ -8,7 +8,10 @@
 void setup()
 {
   Serial.begin(115200);
-  Wire.begin(5, 4); // pins 5 & 4 for wemos
+  pinMode(LED1pin, OUTPUT);
+  //Wire.begin(5, 4); // pins 5 & 4 for wemos
+  Wire.begin(21, 22); //
+
   LogOn();
   BE280.setI2CAddress(0x76); //Connect to BME on ox76
   if (BE280.beginI2C() == false)
@@ -18,10 +21,19 @@ void setup()
   delay(250); // let the BME settle down
 
   ina219.begin();
-  ina219.setCalibration_16V_400mA();
+  ina219.setCalibration_32V_2A();
+  //ina219.setCalibration_16V_400mA();
 
-  ads.setGain(GAIN_TWOTHIRDS);
-  ads.begin();
+  ads2.setGain(GAIN_TWOTHIRDS);
+  ads2.begin();
+
+  server.on("/", handle_OnConnect);
+  server.on("/led1on", handle_led1on);
+  server.on("/led1off", handle_led1off);
+  server.onNotFound(handle_NotFound);
+
+  server.begin();
+  Serial.println("HTTP server started");
 }
 //________________________________________________________________________________
 
@@ -33,7 +45,17 @@ void loop(void)
 
   client.loop();
   currentMillis = millis();
-  send_Data(1000);
+  send_Data(100);
+
+  server.handleClient();
+  if (LED1status)
+  {
+    digitalWrite(LED1pin, HIGH);
+  }
+  else
+  {
+    digitalWrite(LED1pin, LOW);
+  }
 }
 //________________________________________________________________________________
 
@@ -225,6 +247,8 @@ void sendSigK(String sigKey, float data)
     delta.printTo(Udp);
     Udp.println();
     Udp.endPacket();
+    delta.printTo(Serial);
+    Serial.println();
   }
 } //___________________________________________________________
 
@@ -276,16 +300,19 @@ void send_Data(int send_Data_Rate)
     Serial.print("MQTT client connected:  ");
     Serial.println(client.connected());
     counter += 1;
+    String counterTime = String(counter / 60 / 60) + ":" + String(counter / 60 % 60) + ":" + String(counter % 60);
     Serial.print("Counter = ");
-    Serial.println(counter);
-    sendMQTT("esp/pulseWidth", String(counter));
+    Serial.println(counterTime);
+    sendMQTT("esp/pulseWidth", counterTime);
     Serial.print("Rebooted=");
-    Serial.println(rebooted);
+    Serial.println(rebootedString);
 
     if (client.connected() != true)
     {
       Serial.println("Rebooting from data sender module");
       LogOn();
+      rebootedString = String(rebooted + " - " + counterTime);
+      sendMQTT("esp/reboot", rebootedString);
       rebooted += 1;
     }
 
@@ -293,3 +320,63 @@ void send_Data(int send_Data_Rate)
   }
 
 } //___________________________________________________________
+
+void handle_OnConnect()
+{
+  //LED1status = LOW;
+  //LED2status = LOW;
+  //Serial.println("GPIO4 Status: OFF | GPIO5 Status: OFF");
+  server.send(200, "text/html", SendHTML(LED1status));
+}
+
+void handle_led1on()
+{
+  LED1status = HIGH;
+  Serial.println("GPIO4 Status: ON");
+  server.send(200, "text/html", SendHTML(LED1status));
+}
+
+void handle_led1off()
+{
+  LED1status = LOW;
+  Serial.println("GPIO4 Status: OFF");
+  server.send(200, "text/html", SendHTML(LED1status));
+}
+
+void handle_NotFound()
+{
+  server.send(404, "text/plain", "Not found");
+}
+
+String SendHTML(uint8_t led1stat)
+{
+  String ptr = "<!DOCTYPE html> <html>\n";
+  ptr += "<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";
+  ptr += "<title>LED Control</title>\n";
+  ptr += "<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}\n";
+  ptr += "body{margin-top: 50px;} h1 {color: #444444;margin: 50px auto 30px;} h3 {color: #444444;margin-bottom: 50px;}\n";
+  ptr += ".button {display: block;width: 80px;background-color: #3498db;border: none;color: white;padding: 13px 30px;text-decoration: none;font-size: 25px;margin: 0px auto 35px;cursor: pointer;border-radius: 4px;}\n";
+  ptr += ".button-on {background-color: #3498db;}\n";
+  ptr += ".button-on:active {background-color: #2980b9;}\n";
+  ptr += ".button-off {background-color: #34495e;}\n";
+  ptr += ".button-off:active {background-color: #2c3e50;}\n";
+  ptr += "p {font-size: 14px;color: #888;margin-bottom: 10px;}\n";
+  ptr += "</style>\n";
+  ptr += "</head>\n";
+  ptr += "<body>\n";
+  ptr += "<h1>ESP32 Web Server</h1>\n";
+  ptr += "<h3>Using Access Point(AP) Mode</h3>\n";
+
+  if (led1stat)
+  {
+    ptr += "<p>LED1 Status: ON</p><a class=\"button button-off\" href=\"/led1off\">OFF</a>\n";
+  }
+  else
+  {
+    ptr += "<p>LED1 Status: OFF</p><a class=\"button button-on\" href=\"/led1on\">ON</a>\n";
+  }
+
+  ptr += "</body>\n";
+  ptr += "</html>\n";
+  return ptr;
+}

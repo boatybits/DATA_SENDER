@@ -4,6 +4,7 @@
 #include "credentials.h"
 #include <WiFi.h>
 #include <WiFiClient.h>
+#include <WebServer.h>
 #include "PubSubClient.h" // MQTT
 #include "SparkFunBME280.h"
 #include "ArduinoJson.h"
@@ -16,10 +17,18 @@ void callback(char *intopic, byte *payload, unsigned int length);
 void sendMQTT(String topic, String message);
 void sendSigK(String sigKey, float data);
 void send_Data(int send_Data_Rate);
+void handle_OnConnect();
+void handle_led1on();
+void handle_led1off();
+void handle_NotFound();
+String SendHTML(uint8_t led1stat);
 
 const IPAddress remoteIp(10, 10, 10, 1); //
 const unsigned short remotePort = 55561; // Signalk listens on this port
 const unsigned short localPort = 6666;   // local port to listen for UDP packets
+
+uint8_t LED1pin = 2;
+bool LED1status = LOW;
 
 // Timers for loops
 int send_Data_Rate = 1000; // loop time in mS for a2_sendData_Rate
@@ -33,6 +42,7 @@ unsigned long timer4_Millis = 1000;
 unsigned long timer5_Millis = 1000;
 unsigned long timer6_Millis = 1000;
 int rebooted = 0;
+String rebootedString = "0";
 
 // Flags
 int quickprint_flag = 1;
@@ -42,6 +52,7 @@ unsigned long currentMillis;
 
 //                         Start instances of libraries
 WiFiClient espClient;
+WebServer server(80);
 PubSubClient client(espClient); // MQTT
 BME280 BE280;                   //BME280 barometer
 WiFiUDP Udp;                    // A UDP instance to let us send and receive packets over UDP
