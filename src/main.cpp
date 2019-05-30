@@ -7,7 +7,7 @@
 //
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(115200); //
   pinMode(LED1pin, OUTPUT);
   //Wire.begin(5, 4); // pins 5 & 4 for wemos
   Wire.begin(21, 22); //
